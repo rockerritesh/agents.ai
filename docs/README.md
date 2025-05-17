@@ -3,16 +3,16 @@
 2. Add openai `key/base_url/model_name` on .env. (see `apicall.py`)
 3. Activate the env or `uv run context_aware.py`
 
-![Flow](image-3.png)
+![Flow](images/image-3.png)
 ## List of Agent and Tools
 
-![Agents and Tools](image.png)
+![Agents and Tools](images/image.png)
 
 ## Query to SeqOfTaskCall
-![Query to Seq](image-1.png)
+![Query to Seq](images/image-1.png)
 
 ## Tools Calling
-![Tools Calling](image-2.png)
+![Tools Calling](images/image-2.png)
 
 ## FLow Diagram
 
