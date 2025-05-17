@@ -72,7 +72,7 @@ class ContentExtractor:
         Returns:
             str: The narrative extracted from the data
         """
-        dataframe = pd.load_csv(dataframe_path)
+        dataframe = pd.read_csv(dataframe_path)
         class bestColumns(BaseModel):
             columns: List[str]
 

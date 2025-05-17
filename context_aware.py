@@ -235,6 +235,25 @@ def find_relevant_agents(query, agents_list, top_n=3):
     
     # Sort agents by similarity score in descending order
     sim_scores.sort(key=lambda x: x['similarity'], reverse=True)
+
+    # if greates similarity is less than 0.3, return empty list
+    if sim_scores[0]['similarity'] < 0.4:
+        class QA(BaseModel):
+            """Model for storing answer."""
+            answer: str
+        message = [
+            {
+                "role": "system",
+                "content": f"You have these agents available:{agents}. If user ask for something that is not related to any of the agents, you have to answer that you don't know. And request user to rephrase the question. So that agent will be able to answer it."
+            },           
+            {
+                "role": "user",
+                "content": f"Query: {query}."
+            }
+        ]
+        reply = get_reply(message, QA)
+        print(reply.answer)
+        return []
     
     return sim_scores[:top_n]
 
@@ -488,8 +507,18 @@ def process_user_query(query):
     # Add user query to history
     conversation_history.add_user_query(query)
     
+    
     # Find the most relevant agents for the query
-    relevant_agents = find_relevant_agents(query, agents_with_embeddings)
+    relevant_agents = []
+    # equal to 0 or data type is not list
+    while len(relevant_agents) == 0 or not isinstance(relevant_agents, list):
+        relevant_agents = find_relevant_agents(query, agents_with_embeddings)
+        conversation_history.add_system_message(relevant_agents)
+        if len(relevant_agents) == 0:
+            query = input("Enter your query ")
+            # append conversation history with the query
+            conversation_history.add_user_query(query)
+            query = query + str(conversation_history.get_full_history())
     
     if not relevant_agents:
         error_msg = "No relevant agents found for the query."
@@ -522,9 +551,11 @@ def process_user_query(query):
             results[tool_name] = f"Error: Tool '{tool_name}' not found."
             conversation_history.add_system_message(f"Error: Tool '{tool_name}' not found.")
             continue
-        
-        # Update context with previous results and conversation history
-        tool_context = f"Original query: {context}\n\n"
+        if i >= 1:
+            tool_context += f"\n\nPrevious tool outputs: {tool_context}"
+        if i == 0:
+            # Update context with previous results and conversation history
+            tool_context = f"Original query: {context}\n\n"
         if i > 0:
             prev_tools = tool_sequence[:i]
             for prev_tool in prev_tools:
@@ -549,7 +580,7 @@ def process_user_query(query):
     summary = create_results_summary(results, top_agent.name, tool_sequence)
     
     # Save conversation history to file
-    conversation_history.save_to_file()
+    # conversation_history.save_to_file()
     
     return {
         "agent": top_agent.name,
