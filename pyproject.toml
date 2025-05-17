@@ -1,0 +1,17 @@
+[project]
+name = "agents-manager"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "fitz>=0.0.1.dev2",
+    "ipykernel>=6.29.5",
+    "numpy>=2.2.5",
+    "openai>=1.78.1",
+    "pandas>=2.2.3",
+    "pydantic>=2.11.4",
+    "pymupdf>=1.25.5",
+    "pyyaml>=6.0.2",
+]
