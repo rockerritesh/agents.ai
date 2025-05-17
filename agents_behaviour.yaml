@@ -9,13 +9,20 @@
       input_schema: {"file_path": "str"}
       output_schema: "pd.DataFrame"
       capabilities: ["csv-import", "excel-import", "data-cleaning"]
-    - name: "ContentExtractor"
-      version: "1.1.5"
-      description: "Extracts narrative content and insights from structured dataframes"
-      usage: "Use this tool after DataframeLoader to generate narratives from data"
-      input_schema: {"dataframe": "pd.DataFrame", "columns": "List[str]", "sample_rows": "int"}
-      output_schema: "str"
-      capabilities: ["data-to-text", "insight-generation", "story-formatting"]
+    # - name: "ContentExtractor"
+    #   version: "1.1.5"
+    #   description: "Extracts narrative content and insights from structured dataframes"
+    #   usage: "Use this tool after DataframeLoader to generate narratives from data"
+    #   input_schema: {"dataframe_path": "str", "columns": "str", "sample_rows": "int"}
+    #   output_schema: "str"
+    #   capabilities: ["data-to-text", "insight-generation", "story-formatting"]
+    - name: "AdvanceCSVQuery"
+      version: "0.8.0"
+      description: "Allows advanced querying and filtering of CSV data"
+      usage: "Use this tool to perform complex queries on loaded CSV data"
+      input_schema: {"dataframe_path": "str","query": "str"}
+      output_schema: "pd.DataFrame"
+      capabilities: ["filtering", "aggregation", "custom-queries"]
   parameters:
     max_file_size: "50MB"
     writing_style: "informative"
@@ -35,7 +42,7 @@
       version: "0.9.1"
       description: "Creates custom emoji combinations for content"
       usage: "Use this tool to create creative emoji combinations from multiple concepts"
-      input_schema: {"concepts": "List[str]"}
+      input_schema: {"text": "str","concepts": "str"}
       output_schema: "str"
       capabilities: ["emoji-chains", "contextual-mixing", "frequency-control"]
   parameters:
@@ -57,7 +64,7 @@
       version: "1.1.1"
       description: "Expands bullet points or brief notes into full paragraphs"
       usage: "Use this tool after KeypointExtractor to develop full content"
-      input_schema: {"points": "Union[List[str], str]"}
+      input_schema: {"text": "str","points": "Union[List[str], str]"}
       output_schema: "str"
       capabilities: ["detail-addition", "narrative-flow", "tone-consistency"]
   parameters:
@@ -94,7 +101,7 @@
       version: "2.1.0"
       description: "Translates content between multiple languages"
       usage: "Use this tool to translate text to a target language"
-      input_schema: {"text": "str", "target_language": "str", "preserve_style": "bool"}
+      input_schema: {"text": "str", "target_language": "str"}
       output_schema: "str"
       capabilities: ["context-preservation", "idiom-handling", "cultural-adaptation"]
     - name: "StylePreserver"

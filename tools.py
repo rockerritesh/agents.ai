@@ -410,3 +410,33 @@ class CosineSimilarityCalculator:
             return 0.0  # Avoid division by zero
         
         return dot_product / (norm1 * norm2)
+
+class AdvanceCSVQuery:
+    """
+    Performs advanced queries on CSV data using an LLM.
+    Input: dataframe (pd.DataFrame), query (str)
+    Output: pd.DataFrame - Resulting DataFrame after query
+    """
+    @staticmethod
+    def query_dataframe(dataframe_path: str, query: str) -> str:
+        """
+        Performs an advanced query on a DataFrame using an LLM.
+        
+        Args:
+            dataframe_path (pd.DataFrame): The DataFrame to query
+            query (str): The query string
+            
+        Returns:
+            pd.DataFrame: The resulting DataFrame after applying the query
+        """
+        # run following commands uv run script.py dataframe_path query
+        import subprocess
+        command = f"uv run tool/csv_script.py {dataframe_path} '{query}'"
+        try:
+            result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
+            print(f"Query executed successfully: {result.stdout}")
+            # Assuming the script returns a CSV string or path
+            return result.stdout.strip()  # Return first 10 rows for brevity
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing query: {e.stderr}")
+            return f"Error executing query: {e.stderr}"

@@ -14,7 +14,7 @@ from apicall import get_embedding, get_reply, Reply
 from tools import (
     DataframeLoader, ContentExtractor, EmojiTranslator, EmojiMixer,
     KeypointExtractor, ContentExpander, TextExtractor, ContentReformatter,
-    MultilingualTranslator, CosineSimilarityCalculator, StylePreserver
+    MultilingualTranslator, CosineSimilarityCalculator, StylePreserver, AdvanceCSVQuery
 )
 
 from prompts import NORMAL_CHAT, DETERMINE_TOOLS,TOOLS_REQUIRED, VALID_JSON, TASK_COMPLETION
@@ -285,6 +285,7 @@ def get_tool_function(tool_name):
         "ContentReformatter": ContentReformatter.reformat_content,
         "MultilingualTranslator": MultilingualTranslator().translate,
         "StylePreserver": StylePreserver.preserve_style,
+        "AdvanceCSVQuery": AdvanceCSVQuery.query_dataframe,
     }
     
     return tool_map.get(tool_name)
