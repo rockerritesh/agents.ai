@@ -7,6 +7,8 @@ import numpy as np
 
 from apicall import get_reply, Reply
 
+from prompts import DATAFRAME_PATH, NARRATIVE, EMOJI_TRANSLATE
+
 # --- Tool Implementations ---
 
 class DataframeLoader:
@@ -32,7 +34,8 @@ class DataframeLoader:
         message = [
             {
                 "role": "system",
-                "content": "Here is the user information about the file path to load a CSV. Please extract the information of full_path of dataframe(like csv, excel). If more than one file, return the first one."
+                "content": DATAFRAME_PATH
+                # "Here is the user information about the file path to load a CSV. Please extract the information of full_path of dataframe(like csv, excel). If more than one file, return the first one."
             },
             {
                 "role": "user",
@@ -100,7 +103,8 @@ class ContentExtractor:
         message = [
             {
                 "role": "system",
-                "content": "Analyze the provided data snippet from a table and extract the main narrative or key information presented in the selected columns. Focus on describing the trends, patterns, or key points evident in this sample."
+                "content": NARRATIVE
+                # "Analyze the provided data snippet from a table and extract the main narrative or key information presented in the selected columns. Focus on describing the trends, patterns, or key points evident in this sample."
             },
             {
                 "role": "user",
@@ -131,7 +135,8 @@ class EmojiTranslator:
         message = [
             {
                 "role": "system",
-                "content": "Translate the following text or concept into a sequence of relevant emojis. Provide only the emojis."
+                "content": EMOJI_TRANSLATE
+                # "Translate the following text or concept into a sequence of relevant emojis. Provide only the emojis."
             },
             {
                 "role": "user",

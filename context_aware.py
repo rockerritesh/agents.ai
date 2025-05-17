@@ -17,6 +17,8 @@ from tools import (
     MultilingualTranslator, CosineSimilarityCalculator, StylePreserver
 )
 
+from prompts import NORMAL_CHAT, DETERMINE_TOOLS,TOOLS_REQUIRED, VALID_JSON, TASK_COMPLETION
+
 # %%
 # Function to load YAML configuration file
 def load_yaml(file_path):
@@ -214,6 +216,7 @@ def generate_agent_embeddings(agents_list):
 agents_with_embeddings = generate_agent_embeddings(agents)
 
 # %%
+
 # Function to find the most relevant agent based on a query
 def find_relevant_agents(query, agents_list, top_n=3):
     """
@@ -244,7 +247,7 @@ def find_relevant_agents(query, agents_list, top_n=3):
         message = [
             {
                 "role": "system",
-                "content": f"You have these agents available:{agents}. If user ask for something that is not related to any of the agents, you have to answer that you don't know. And request user to rephrase the question. So that agent will be able to answer it."
+                "content": NORMAL_CHAT.format(agents)
             },           
             {
                 "role": "user",
@@ -310,8 +313,9 @@ def determine_tool_sequence(agent, query):
     message = [
         {
             "role": "system",
-            "content": f"You have to find the best sequence for list of tools to complete the task. Available tools: {agent}"
-            f"\n\nConversation context: {context_summary}"
+            "content": DETERMINE_TOOLS.format(agent,context_summary)
+            #f"You have to find the best sequence for list of tools to complete the task. Available tools: {agent}"
+            #f"\n\nConversation context: {context_summary}"
         },
         {
             "role": "user",
@@ -352,8 +356,9 @@ def gather_tool_inputs(tool_name, tool_function, context=""):
     message = [
         {
             "role": "system",
-            "content": f"You have to ask for the details of the tools required to complete the task. The tool required is {tool_name} with inputs: {input_schema}."
-            f"\n\nContext from previous interactions: {full_context}"
+            "content": TOOLS_REQUIRED.format(tool_name, input_schema, full_context)
+            # f"You have to ask for the details of the tools required to complete the task. The tool required is {tool_name} with inputs: {input_schema}."
+            # f"\n\nContext from previous interactions: {full_context}"
         },
         {
             "role": "user",
@@ -377,7 +382,8 @@ def gather_tool_inputs(tool_name, tool_function, context=""):
         else:
             # Update the message with the flow of question
             history = history + f"Context:{full_context}" + reply.flow_of_question + '\n'
-            message[0]['content'] = f"You have to ask for the details required to complete the task. The tool required is {tool_name} with inputs: {input_schema}. History of questions: {history}"
+            message[0]['content'] = TASK_COMPLETION.format(tool_name, input_schema, history)
+            # f"You have to ask for the details required to complete the task. The tool required is {tool_name} with inputs: {input_schema}. History of questions: {history}"
             
             # Get input from user
             query = input(f"[Tool: {tool_name}] {reply.flow_of_question} ")
@@ -396,7 +402,8 @@ def gather_tool_inputs(tool_name, tool_function, context=""):
     message = [
         {
             "role": "system",
-            "content": f"Convert the user's input into a valid JSON object that matches this function schema: {input_schema}. Return ONLY the JSON object and nothing else."
+            "content": VALID_JSON.format(input_schema)
+            # f"Convert the user's input into a valid JSON object that matches this function schema: {input_schema}. Return ONLY the JSON object and nothing else."
         },
         {
             "role": "user",
