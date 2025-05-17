@@ -1,3 +1,8 @@
+# How to run
+1. `uv init`
+2. Add openai key on .env.(see `apicall.py`)
+3. Activate the env or `uv run context_aware.py`
+
 ![Flow](image-3.png)
 ## List of Agent and Tools
 
