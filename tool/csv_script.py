@@ -297,7 +297,7 @@ Include only the necessary code to accomplish the task. Assume pandas, matplotli
         if not success:
             print("\nFailed to execute the code successfully after all retry attempts.")
 
-        return success
+        return result
 
 # Example usage
 if __name__ == "__main__":

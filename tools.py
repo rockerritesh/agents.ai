@@ -18,7 +18,7 @@ class DataframeLoader:
     Output: pandas DataFrame or None if there's an error
     """
     @staticmethod
-    def load_csv(file_path: str) -> Union[pd.DataFrame, None]:
+    def load_csv(file_path: str) -> bool:
         """
         Loads a CSV file into a pandas DataFrame.
         
@@ -47,13 +47,13 @@ class DataframeLoader:
         try:
             df = pd.read_csv(file_path)
             print(f"Successfully loaded {file_path}")
-            return df
+            return True
         except FileNotFoundError:
             print(f"Error: File not found at {file_path}")
-            return None
+            return False
         except Exception as e:
             print(f"An error occurred while loading the CSV: {e}")
-            return None
+            return False
 
 class ContentExtractor:
     """
@@ -418,7 +418,7 @@ class AdvanceCSVQuery:
     Output: pd.DataFrame - Resulting DataFrame after query
     """
     @staticmethod
-    def query_dataframe(dataframe_path: str, query: str) -> str:
+    def query_dataframe(dataframe_path: str, text_query: str) -> str:
         """
         Performs an advanced query on a DataFrame using an LLM.
         
@@ -431,7 +431,7 @@ class AdvanceCSVQuery:
         """
         # run following commands uv run script.py dataframe_path query
         import subprocess
-        command = f"uv run tool/csv_script.py {dataframe_path} '{query}'"
+        command = f"uv run tool/csv_script.py {dataframe_path} '{text_query}'"
         try:
             result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
             print(f"Query executed successfully: {result.stdout}")

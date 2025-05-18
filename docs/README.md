@@ -1,7 +1,7 @@
 # How to run
 1. `uv init`
 2. Add openai `key/base_url/model_name` on .env. (see `apicall.py`)
-3. Activate the env or `uv run context_aware.py`
+3. Activate the env or `uv run final_version.py`
 
 ![Flow](/images/image-3.png)
 ## List of Agent and Tools

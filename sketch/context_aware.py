@@ -135,7 +135,7 @@ class ConversationHistory:
                 output_str = str(output)
                 # Truncate long outputs
                 if len(output_str) > 300:
-                    output_str = output_str[:300] + "... (truncated)"
+                    output_str = output_str#[:300] + "... (truncated)"
                 context += f"- {name}: {output_str}\n"
         
         # Add recent relevant history entries
@@ -148,7 +148,7 @@ class ConversationHistory:
                     tool = entry.get("tool")
                     output = entry.get("output", "")
                     if len(output) > 200:
-                        output = output[:200] + "... (truncated)"
+                        output = output#[:200] + "... (truncated)"
                     recent_entries.append(f"Tool {tool} produced: {output}")
         
         if recent_entries:
@@ -239,8 +239,8 @@ def find_relevant_agents(query, agents_list, top_n=3):
     # Sort agents by similarity score in descending order
     sim_scores.sort(key=lambda x: x['similarity'], reverse=True)
 
-    # if greates similarity is less than 0.3, return empty list
-    if sim_scores[0]['similarity'] < 0.4:
+    # if greates similarity is less than 0.5, return empty list
+    if sim_scores[0]['similarity'] < 0.5:
         class QA(BaseModel):
             """Model for storing answer."""
             answer: str
@@ -256,6 +256,7 @@ def find_relevant_agents(query, agents_list, top_n=3):
         ]
         reply = get_reply(message, QA)
         print(reply.answer)
+        conversation_history.add_system_message(reply.answer)
         return []
     
     return sim_scores[:top_n]
@@ -308,7 +309,7 @@ def determine_tool_sequence(agent, query):
             for tool_name, output in conversation_history.tool_outputs.items():
                 if isinstance(output, str):
                     # Truncate long outputs
-                    output_summary = output[:100] + "..." if len(output) > 100 else output
+                    output_summary = output#[:100] + "..." if len(output) > 100 else output
                     context_summary += f"- {tool_name}: {output_summary}\n"
     
     message = [
@@ -489,11 +490,11 @@ def create_results_summary(results, agent_name, tool_sequence):
         if isinstance(output, str):
             # Limit the length of the output in the summary
             if len(output) > 500:
-                summary += output[:500] + "... (truncated)"
+                summary += output#[:500] + "... (truncated)"
             else:
                 summary += output
         else:
-            summary += str(output)[:500] + "..." if len(str(output)) > 500 else str(output)
+            summary += str(output)#[:500] + "..." if len(str(output)) > 500 else str(output)
     
     # Add the summary to conversation history
     conversation_history.add_system_message("Process completed - Summary generated")
@@ -521,7 +522,7 @@ def process_user_query(query):
     # equal to 0 or data type is not list
     while len(relevant_agents) == 0 or not isinstance(relevant_agents, list):
         relevant_agents = find_relevant_agents(query, agents_with_embeddings)
-        conversation_history.add_system_message(relevant_agents)
+        # conversation_history.add_system_message(relevant_agents)
         if len(relevant_agents) == 0:
             query = input("Enter your query ")
             # append conversation history with the query
@@ -588,7 +589,7 @@ def process_user_query(query):
     summary = create_results_summary(results, top_agent.name, tool_sequence)
     
     # Save conversation history to file
-    # conversation_history.save_to_file()
+    conversation_history.save_to_file()
     
     return {
         "agent": top_agent.name,
