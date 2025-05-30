@@ -1,7 +1,7 @@
 # Semantic Similarity-Driven Multi-Agent System with Dynamic Tool Orchestration: A Novel Approach to Intelligent Task Automation
 
 **Authors:** Sumit Yadav (rockerritesh)  
-**Affiliation:** Pokhara University, Nepal  
+**Affiliation:** Pulchowk Campus, Tribhuvan University, Nepal  
 **Email:** 076bct088.sumit@pcampus.edu.np  
 **Date:** 2025
 
