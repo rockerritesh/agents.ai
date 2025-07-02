@@ -30,9 +30,10 @@ An intelligent multi-agent system that automatically selects the best agent and 
 2. **Environment setup:**
    Create a `.env` file with your OpenAI configuration:
    ```env
-   OPENAI_API_KEY=your_api_key_here
-   OPENAI_BASE_URL=https://api.openai.com/v1  # Optional
-   OPENAI_MODEL_NAME=gpt-4  # Optional
+    OPENAI_API_KEY=your_api_key_here
+    BASE_URL_OPENAI= "https://api.openai.com/v1"
+    MODEL_NAME= "gpt-4o"
+    EMBEDDING_MODEL_NAME ="text-embedding-3-large"
    ```
    See `apicall.py` for configuration details.
 
